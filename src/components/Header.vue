@@ -3,13 +3,13 @@
     <v-toolbar class="teal lighten-2" dark>
       <v-toolbar-side-icon
         @click.native.stop="sideNav=!sideNav"
-        class="hidden-sm-and-up"></v-toolbar-side-icon>
+        class="hidden-lg-and-up"></v-toolbar-side-icon>
       <v-toolbar-title>
         <router-link to="/" tag="button">Filmweb</router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items
-        class="hidden-xs-only">
+        class="hidden-sm-and-down">
         <v-btn
           v-for="btn in menuItems"
           flat

@@ -1,5 +1,5 @@
 <template>
-  <div style="margin: 6px;">
+  <div style="margin: 6px;" @click="onLoadMovie">
     <v-card color="cyan darken-2" class="white--text">
       <v-container fluid grid-list-lg>
         <v-layout row>
@@ -32,6 +32,12 @@
 
       }
     },
-    props: ['movie']
+    props: ['movie'],
+    methods: {
+      onLoadMovie() {
+        console.log("go to movie")
+        this.$router.push('/movie/'+this.movie.id);
+      }
+    }
   }
 </script>

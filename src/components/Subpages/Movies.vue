@@ -7,7 +7,7 @@
         </v-toolbar>
       </v-layout>
       <v-layout row wrap>
-        <v-flex xs12 mg6 lg4 v-for="movie in Movies" :key="movie.title">
+        <v-flex xs12 mg6 lg4 v-for="movie in getMovies" :key="movie.title">
           <movie-element :movie="movie"></movie-element>
         </v-flex>
       </v-layout>

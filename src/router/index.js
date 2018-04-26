@@ -9,6 +9,8 @@ import Generator from '@/components/Subpages/Generator'
 import Movies from '@/components/Subpages/Movies'
 import Logout from '@/components/Subpages/logout'
 import NewCategory from '@/components/Subpages/newCategory'
+import Movie from '@/components/Subpages/Movie'
+import AuthGuard from '@/router/auth-guard'
 import * as firebase from 'firebase'
 
 Vue.use(Router)
@@ -40,7 +42,8 @@ export default new Router({
     {
       path: '/newmovie',
       name: 'Newmovie',
-      component: NewMovie
+      component: NewMovie,
+      beforeEnter: AuthGuard
     },
     {
       path: '/generator',
@@ -60,7 +63,13 @@ export default new Router({
     {
       path: '/newcategory',
       name: 'NewCategory',
-      component: NewCategory
+      component: NewCategory,
+      beforeEnter: AuthGuard
     },
+    {
+      path: '/movie/:id',
+      name: 'Movie',
+      component: Movie
+    }
   ]
 })

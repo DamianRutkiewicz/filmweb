@@ -3,23 +3,39 @@
 //   }
 import * as firebase from 'firebase'
 
-export const createMovieAction = ({commit}, object) => {
+export const createMovieAction = ({commit}, mov) => {
+console.log("Akcja mov: ",mov)
+  // const movie = {
+  //   title: mov.title,
+  //   imageUrl: mov.imageUrl,
+  //   description: mov.description,
+  //   category: mov.categorySelected,
+  //   isRecomended: mov.isRecomended,
+  //   date: mov.date
+  // }
 
-  const movie = {
-    title: object.title,
-    imageUrl: object.imageUrl,
-    description: object.description,
-    category: object.categorySelected,
-    date: object.date
-  }
-  firebase.database().ref('movies').push(movie)
+  firebase.database().ref('movies').push(mov)
     .then(
-      data => {
-        console.log("Udalo sie dodac film : ",data);
-        commit('createMovieMutation', movie);
+      (data) => {
+        // console.log("Udalo sie dodac film : ",data, " movie:",movie);
+        const key = data.key;
+
+        const movie = {
+          title: mov.title,
+          imageUrl: mov.imageUrl,
+          description: mov.description,
+          category: mov.categorySelected,
+          isRecomended: mov.isRecomended,
+          date: mov.date,
+          key: key
+        }
+
+
+        console.log("data when i add movie: ", key);
+        commit('createMovieMutation',movie);
       }
     ).catch(error => {
-      console.log("Nie udalo sie dodac filmu");
+      console.log("Nie udalo sie dodac filmu:", error);
     })
   //Zapisanie w firebase
 
@@ -64,7 +80,10 @@ export const loadMoviesAction = ({ commit }) => {
         const movies = [];
         const ob = data.val();
         for(let key in ob) {
-          movies.push(ob[key]);
+          movies.push({
+            ...ob[key],
+            id: key
+          });
         }
 
         commit('setLoadedMovies', movies);
@@ -106,4 +125,8 @@ export const createCategoryAction = ({ commit }, ob) => {
     ).catch(error => {
       console.log("Nie udalo sie dodac kategorii");
     })
+}
+
+export const autoSignInAction = ({ commit }, user) => {
+  commit('setUserMutation', { id: user.uid, registeredMovies: []});
 }

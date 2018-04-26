@@ -1,9 +1,9 @@
 // export const increment = state => {
 //     state.counter++
 // }
-export const createMovieMutation = (state, object) => {
-  console.log("from Mutation: ",object)
-  state.moviesList.push(object);
+export const createMovieMutation = (state, movie) => {
+  console.log("from Mutation: ",movie)
+  state.moviesList.push(movie);
 }
 
 export const setUserMutation = (state, object) => {

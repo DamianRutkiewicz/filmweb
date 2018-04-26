@@ -59,6 +59,15 @@
             </v-flex>
           </v-layout>
           <v-layout row>
+            <v-flex xs12 sm6 offset-sm3>
+              <v-checkbox
+                label="Add to recomended ?"
+                v-model="isRecomended"
+                :rules="[v => !!v || 'You must agree to continue!']"
+              ></v-checkbox>
+            </v-flex>
+          </v-layout>
+          <v-layout row>
             <v-flex xs12>
               <v-btn @click="clearForm">Clear</v-btn>
               <v-btn
@@ -67,6 +76,7 @@
                 type="submit">Create</v-btn>
             </v-flex>
           </v-layout>
+
         </form>
       </v-flex>
     </v-layout>
@@ -85,6 +95,7 @@ import { mapActions, mapGetters } from 'vuex';
         imageUrl: '',
         title: '',
         desc: '',
+        isRecomended: '',
         // cat: [
         //   { text: 'Cat 1', test: ''},
         //   { text: 'Cat 2', test: ''},
@@ -114,9 +125,9 @@ import { mapActions, mapGetters } from 'vuex';
           imageUrl: this.imageUrl,
           description: this.desc,
           categorySelected: this.categorySelected.title,
-          date: new Date()
+          isRecomended: this.isRecomended,
+          date: new Date().toISOString(),
         }
-        console.log(movie);
         this.createMovieAction(movie);
         this.clearForm();
       },

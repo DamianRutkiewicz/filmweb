@@ -1,7 +1,7 @@
 <template>
   <v-container justify-space-around="true">
     <v-layout row wrap>
-      <v-flex xs12 md6 lg4 v-for="movie in getMovies" :key="movie.title">
+      <v-flex xs12 md6 lg4 v-for="movie in Movies" :key="movie.title">
         <movie-element :movie="movie"></movie-element>
       </v-flex>
     </v-layout>
@@ -24,7 +24,10 @@ import { mapGetters } from 'vuex'
     computed: {
       ...mapGetters([
         'getMovies'
-      ])
+      ]),
+      Movies() {
+        return this.getMovies.filter(v => v.isRecomended == true);
+      }
     }
   }
 </script>

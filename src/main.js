@@ -7,6 +7,9 @@ import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import { store } from './store/store'
 import * as firebase from 'firebase'
+import VueLodash from 'vue-lodash'
+
+Vue.use(VueLodash)
 
 Vue.use(Vuetify)
 
@@ -27,6 +30,12 @@ new Vue({
     databaseURL: "https://filmbase-5f437.firebaseio.com",
     projectId: "filmbase-5f437",
     storageBucket: "filmbase-5f437.appspot.com",
+    })
+
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.$store.dispatch('autoSignInAction', user);
+      }
     })
 
     this.$store.dispatch('loadCategoriesAction');
