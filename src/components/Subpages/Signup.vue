@@ -1,5 +1,16 @@
 <template>
   <v-container>
+    <!-- <div class="text-xs-center">
+      <v-btn color="primary" @click="alert = !alert">Toggle</v-btn>
+    </div> -->
+    <v-alert
+      type="success"
+      :value="alert"
+      transition="scale-transition"
+    >
+      {{ error }}
+    </v-alert>
+
     <v-layout row>
       <v-flex xs12>
         <h2 class="primary--text">Sign Up</h2>
@@ -74,16 +85,30 @@ import { mapActions, mapGetters } from 'vuex'
       return {
         email: '',
         password: '',
-        confpassword: ''
+        confpassword: '',
+        error: '',
+        showError: false,
       }
     },
     computed: {
       ...mapGetters([
-        'getUser'
+        'getUser',
+        'isError'
       ]),
       comparePasswords() {
         return this.password !== this.confpassword? 'Passwords do not match': true;
       },
+      alert() {
+        if(this.isError) {
+          this.showError = true;
+          this.error = this.isError.message;
+          return true;
+        } else {
+          this.showError = false;
+          return false;
+        }
+
+      }
       // user() {
       //   return get
       // }

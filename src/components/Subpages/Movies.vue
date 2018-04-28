@@ -1,5 +1,6 @@
 <template>
   <div>
+
     <v-container>
       <v-layout>
         <v-toolbar>
@@ -7,7 +8,7 @@
         </v-toolbar>
       </v-layout>
       <v-layout row wrap>
-        <v-flex xs12 mg6 lg4 v-for="movie in getMovies" :key="movie.title">
+        <v-flex xs12 mg6 lg4 v-for="movie in Movies" :key="movie.title">
           <movie-element :movie="movie"></movie-element>
         </v-flex>
       </v-layout>
@@ -23,7 +24,7 @@ import { mapGetters } from 'vuex'
     data() {
       return {
         selectedCategory: '',
-        movies: []
+        movies: [],
       }
     },
     computed: {
@@ -39,7 +40,14 @@ import { mapGetters } from 'vuex'
           //     this.movies.push(this.getMovies[n]);
           //   }
           // }
-          this.movies = this.getMovies.filter(movie => movie.category === this.selectedCategory);
+          this.movies = [];
+
+          for(let key in this.getMovies) {
+            if(this.selectedCategory === this.getMovies[key].category) {
+              this.movies.push(this.getMovies[key]);
+            }
+          }
+
           return this.movies;
         } else {
           return this.getMovies;
@@ -52,6 +60,7 @@ import { mapGetters } from 'vuex'
     },
     methods: {
       filterMovies(cat) {
+        // console.log()
         this.selectedCategory = cat;
       }
     },

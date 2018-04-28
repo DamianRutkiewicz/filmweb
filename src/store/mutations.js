@@ -22,3 +22,7 @@ export const setLoadedCategories = (state, ob) => {
 export const logoutUserMutation = (state) => {
   state.user = null;
 }
+
+export const setErrorMutation = (state, error) => {
+  state.error = error;
+}

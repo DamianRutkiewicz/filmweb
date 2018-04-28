@@ -11,7 +11,14 @@ import VueLodash from 'vue-lodash'
 
 Vue.use(VueLodash)
 
-Vue.use(Vuetify)
+Vue.use(Vuetify, {
+  theme: {
+    primary: '#1565C0',
+    secondary: '#00BCD4',
+    accent: '#9c27b0',
+    error: '#b71c1c'
+  }
+})
 
 Vue.config.productionTip = true
 
@@ -29,7 +36,7 @@ new Vue({
     authDomain: "filmbase-5f437.firebaseapp.com",
     databaseURL: "https://filmbase-5f437.firebaseio.com",
     projectId: "filmbase-5f437",
-    storageBucket: "filmbase-5f437.appspot.com",
+    storageBucket: "gs://filmbase-5f437.appspot.com",
     })
 
     firebase.auth().onAuthStateChanged((user) => {

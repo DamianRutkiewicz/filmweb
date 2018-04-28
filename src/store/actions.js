@@ -5,24 +5,19 @@ import * as firebase from 'firebase'
 
 export const createMovieAction = ({commit}, mov) => {
 console.log("Akcja mov: ",mov)
-  // const movie = {
-  //   title: mov.title,
-  //   imageUrl: mov.imageUrl,
-  //   description: mov.description,
-  //   category: mov.categorySelected,
-  //   isRecomended: mov.isRecomended,
-  //   date: mov.date
-  // }
-
+let imageUrl;
+let key;
+var movie;
   firebase.database().ref('movies').push(mov)
     .then(
       (data) => {
         // console.log("Udalo sie dodac film : ",data, " movie:",movie);
-        const key = data.key;
+        key = data.key;
 
-        const movie = {
+        movie = {
           title: mov.title,
           imageUrl: mov.imageUrl,
+          image: mov.image,
           description: mov.description,
           category: mov.categorySelected,
           isRecomended: mov.isRecomended,
@@ -30,11 +25,37 @@ console.log("Akcja mov: ",mov)
           key: key
         }
 
+        commit('createMovieMutation',{
+            ...movie,
+          });
 
-        console.log("data when i add movie: ", key);
-        commit('createMovieMutation',movie);
+        return key;
+
       }
-    ).catch(error => {
+    )
+    // .then((key) => {
+    //   if(mov.image) {
+    //     const filename = mov.image.name;
+    //     const ext = filename.slice(filename.lastIndexOf('.'));
+    //     console.log("filename: ",filename, " ext:",ext);
+    //     return firebase.storage().ref('movies/'+key+'.'+ext);
+    //   }
+    //
+    // })
+    // .then(fileData => {
+    //   console.log("fileData : ",fileData)
+    //   imageUrl = fileData.metadata.downloadURLs[0]
+    //
+    //   return firebase.database().ref('movies').child(key).update({imageFileUrl: imageUrl})
+    // })
+    // .then(() => {
+    //   console.log("data when i add movie: ", key);
+    //   commit('createMovieMutation',{
+    //     ...movie,
+    //     imageFileUrl
+    //   });
+    // })
+    .catch(error => {
       console.log("Nie udalo sie dodac filmu:", error);
     })
   //Zapisanie w firebase
@@ -55,6 +76,7 @@ export const signUpAction = ({commit},object) => {
     ).catch(
       error => {
         console.log("ERROR : ",error)
+        commit('setErrorMutation', error)
       }
     );
 
@@ -64,11 +86,12 @@ export const signUserInAction = ({commit}, ob) => {
   firebase.auth().signInWithEmailAndPassword(ob.email,ob.password)
     .then(
       user => {
-        const newUser = {
+        const User = {
           id: user.uid,
           registeredMovies: user.registeredMovies
         }
-        commit('setUserMutation', newUser);
+        console.log("Zalogowałeś sie : ",User)
+        commit('setUserMutation', User);
       }
     ).catch( error => console.log("error: ",error));
 }
@@ -77,13 +100,17 @@ export const loadMoviesAction = ({ commit }) => {
   firebase.database().ref('movies').once('value')
     .then(
       data => {
-        const movies = [];
+        const movies = {};
         const ob = data.val();
         for(let key in ob) {
-          movies.push({
+          // movies.push({
+          //   ...ob[key],
+          //   id: key
+          // });
+          movies[key] = {
             ...ob[key],
             id: key
-          });
+          }
         }
 
         commit('setLoadedMovies', movies);
@@ -98,10 +125,10 @@ export const loadCategoriesAction = ({ commit }) => {
   firebase.database().ref('categories').once('value')
     .then(
       data => {
-        const categories = [];
+        const categories = {};
         const ob = data.val();
         for(let key in ob) {
-          categories.push(ob[key]);
+          categories[key]= ob[key];
         }
         commit('setLoadedCategories', categories);
       }

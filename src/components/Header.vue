@@ -1,11 +1,11 @@
 <template>
   <div>
-    <v-toolbar class="teal lighten-2" dark>
+    <v-toolbar class="teal lighten-2" dark color="primary">
       <v-toolbar-side-icon
         @click.native.stop="sideNav=!sideNav"
         class="hidden-lg-and-up"></v-toolbar-side-icon>
       <v-toolbar-title>
-        <router-link to="/" tag="button">Filmweb</router-link>
+        <router-link to="/" tag="button">Filmbase</router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items
@@ -59,16 +59,16 @@ import { mapGetters } from 'vuex'
       ]),
       menuItems() {
         let menuItems = [
-          { icon: 'supervisor_account', title: 'Movies', link: '/movies'},
-          { icon: 'supervisor_account', title: 'generator', link: '/generator'},
-          { icon: 'supervisor_account', title: 'login', link: '/login'},
-          { icon: 'supervisor_account', title: 'signup', link: '/signup'},
+          { icon: 'videocam', title: 'Movies', link: '/movies'},
+          { icon: 'cached', title: 'generator', link: '/generator'},
+          { icon: 'person', title: 'login', link: '/login'},
+          { icon: 'person_add', title: 'signup', link: '/signup'},
 
         ]
         if(this.userIsAuthenticated) {
           menuItems = [
-            { icon: 'supervisor_account', title: 'Movies', link: '/movies'},
-            { icon: 'supervisor_account', title: 'Generator', link: '/generator'},
+            { icon: 'videocam', title: 'Movies', link: '/movies'},
+            { icon: 'cached', title: 'Generator', link: '/generator'},
             { icon: 'supervisor_account', title: 'New Movie', link: '/newmovie'},
             { icon: 'supervisor_account', title: 'New Category', link: '/newcategory'},
             { icon: 'supervisor_account', title: 'logout', link: '/logout'},

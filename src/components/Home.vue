@@ -15,7 +15,7 @@
           </div>
           <v-carousel>
             <v-carousel-item
-              v-for="(movie,i) in getMovies"
+              v-for="(movie,i) in filteredMovies"
               :src="movie.imageUrl"
               :key="movie.id">
               <div class="title">
@@ -52,7 +52,18 @@ export default {
     ...mapGetters([
       'getMovies',
       'isSliderLoading'
-    ])
+    ]),
+    filteredMovies() {
+      // return this.getMovies.filter( v => v.isRecomended);
+      let movies = {};
+
+      for(let key in this.getMovies) {
+        if(this.getMovies[key].isRecomended) {
+          movies[key] = this.getMovies[key];
+        }
+      }
+      return movies;
+    }
   }
 }
 </script>

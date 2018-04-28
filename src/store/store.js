@@ -17,6 +17,7 @@ export const store = new Vuex.Store({
     user: null,
     sliderIsLoading: true,
     movieIsLoading: false,
+    error: null,
     // error: null
   },
   mutations,

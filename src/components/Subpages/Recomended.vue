@@ -26,7 +26,20 @@ import { mapGetters } from 'vuex'
         'getMovies'
       ]),
       Movies() {
-        return this.getMovies.filter(v => v.isRecomended == true);
+        console.log("movies: ",this.getMovies);
+        let ob= {};
+        // filter(v => v.isRecomended == true)
+        // return this.getMovies.map(v => {
+        //   console.log("element: ", v)
+        // });
+        for( let key in this.getMovies) {
+          console.log("this.getMovies: ",this.getMovies[key].isRecomended);
+          if(this.getMovies[key].isRecomended) {
+            ob[key] = this.getMovies[key];
+          }
+        }
+        console.log("recomended movies: ",ob);
+        return ob;
       }
     }
   }

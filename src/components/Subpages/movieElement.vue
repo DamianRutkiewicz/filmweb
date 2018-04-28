@@ -1,6 +1,6 @@
 <template>
-  <div style="margin: 6px;" @click="onLoadMovie">
-    <v-card color="cyan darken-2" class="white--text">
+  <!-- <div style="margin: 6px;" @click="onLoadMovie">
+    <v-card color="secondary" class="white--text">
       <v-container fluid grid-list-lg>
         <v-layout row>
           <v-flex xs7>
@@ -22,7 +22,31 @@
         </v-layout>
       </v-container>
     </v-card>
-  </div>
+  </div> -->
+  <v-layout class="lay-element">
+    <v-flex xs12 style="margin: 6px;" @click="onLoadMovie">
+      <v-card>
+        <v-card-media
+          class="white--text"
+          height="200px"
+          :src="movie.imageUrl"
+        >
+          <v-container fill-height fluid>
+            <v-layout fill-height>
+              <v-flex xs12 align-end flexbox>
+                <span class="headline">{{ movie.title }}</span>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-card-media>
+        <v-card-title>
+          <div>
+            <span>{{ movie.title }}</span><br>
+          </div>
+        </v-card-title>
+      </v-card>
+    </v-flex>
+  </v-layout>
 </template>
 
 <script>
@@ -41,3 +65,9 @@
     }
   }
 </script>
+
+<style scoped>
+  .lay-element {
+    cursor: pointer;
+  }
+</style>
