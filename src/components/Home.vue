@@ -10,10 +10,10 @@
       </v-layout> -->
       <v-layout row wrap>
         <v-flex xs12>
-          <div class="load-bar" v-if="isSliderLoading">
+          <div class="load-bar" v-if="isLoading">
             <v-progress-circular indeterminate :size="70" :width="7" color="purple"></v-progress-circular>
           </div>
-          <v-carousel>
+          <v-carousel v-else>
             <v-carousel-item
               v-for="(movie,i) in filteredMovies"
               :src="movie.imageUrl"
@@ -51,7 +51,8 @@ export default {
   computed: {
     ...mapGetters([
       'getMovies',
-      'isSliderLoading'
+      'isSliderLoading',
+      'isLoading'
     ]),
     filteredMovies() {
       // return this.getMovies.filter( v => v.isRecomended);
@@ -82,11 +83,11 @@ export default {
   .flex {
     position: relative;
   }
-  .load-bar {
+  /* .load-bar {
     z-index: 99999999;
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%,-50%);
-  }
+  } */
 </style>

@@ -66,8 +66,9 @@ import { mapActions } from 'vuex';
       ]),
       onCreateCategory() {
         const category = {
-          title: this.title,
+          title: this.title.toUpperCase(),
           desc: this.desc,
+          text: this.title,
           items: []
         }
 

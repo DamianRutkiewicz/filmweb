@@ -87,16 +87,6 @@ import { mapGetters } from 'vuex'
         'getCategories',
         'getMovies'
       ]),
-      // filteredMovies() {
-      //   // return this.getMovies.filter( v => v.title)
-      //   if(this.selectedCategory.text !== '' && this.selectedCategory.text !== undefined && this.selectedCategory.text !== null) {
-      //     return this.getMovies.filter(v => v.category === this.selectedCategory.text);
-      //   } else {
-      //     console.log("zwracam calosc: ",this.getMovies)
-      //     return this.getMovies;
-      //   }
-      //
-      // },
       categories() {
         let categories = [];
         for(let cat in this.getCategories) {
@@ -107,31 +97,23 @@ import { mapGetters } from 'vuex'
       },
       movies() {
         let movies = [];
-
         for(let key in this.getMovies) {
           if(this.selectedCategory.text !== '' && this.selectedCategory.text !== undefined && this.selectedCategory.text !== null) {
-            if(this.selectedCategory === this.getMovies[key]) {
+            if(this.selectedCategory.text.toLowerCase() === this.getMovies[key].category.toLowerCase()) {
               movies.push(this.getMovies[key]);
             }
-            return this.getMovies.filter(v => v.category === this.selectedCategory.text);
           } else {
             movies.push(this.getMovies[key]);
           }
         }
-
         return movies;
-      }
-    },
-    watch: {
-      selectedCategory(val) {
-        console.log("selectedCategory: ",val.text)
       }
     },
     methods: {
       randomMovie() {
         this.erorr = null;
         this.selectedMovie = '';
-        console.log("this.filteredMovies")
+        this.movies;
         if(this.movies.length > 0) {
           let randMovie = _.random(this.movies.length - 1);
           this.selectedMovie = this.movies[randMovie];
@@ -140,7 +122,6 @@ import { mapGetters } from 'vuex'
             return;
           }
           this.lastMovie = this.selectedMovie;
-          console.log("Wylosowany film to : ", this.movies[randMovie].title);
         } else {
           console.log("nie znaleziono filmu");
           this.error = 'Unfortunately, the movie was not found';

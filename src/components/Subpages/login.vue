@@ -43,6 +43,22 @@
                     </v-btn>
                   </v-flex>
                 </v-layout>
+                <v-layout row>
+                  <v-btn @click="signUserInFacebookAction">Login with Facebook</v-btn>
+                  <!-- <fb-signin-button
+                    :params="fbSignInParams"
+                    @success="onSignInSuccess"
+                    @error="onSignInError">
+                    Sign in with Facebook
+                  </fb-signin-button> -->
+                  <!-- <my-component class="button"
+                    appId="160567311288930"
+                    @login="getUserData"
+                    @logout="onLogout"
+                    @get-initial-status="getUserData">
+                  </my-component> -->
+                  <!-- <div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div> -->
+                </v-layout>
               </form>
             </v-container>
           </v-card-text>
@@ -54,12 +70,25 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import Vue from 'vue'
+// import FBSignInButton from 'vue-facebook-signin-button'
+import facebookLogin from 'facebook-login-vuejs';
+
+Vue.component('my-component', {
+    components: {
+        facebookLogin
+    }
+});
 
   export default {
     data() {
       return {
         email: '',
         password: '',
+        fbSignInParams: {
+          scope: 'email,user_likes',
+          return_scopes: true
+        }
       }
     },
     computed: {
@@ -76,8 +105,17 @@ import { mapActions, mapGetters } from 'vuex'
     },
     methods: {
       ...mapActions([
-        'signUserInAction'
+        'signUserInAction',
+        'signUserInFacebookAction'
       ]),
+      onSignInSuccess (response) {
+        FBSignInButton.api('/login', dude => {
+          console.log(`Good to see you, ${dude.name}.`)
+        })
+      },
+      onSignInError (error) {
+        console.log('OH NOES', error)
+      },
       onSignin() {
         //vuex
         // console.log("signup: ",{ email: this.email, password: this.password, confpassword: this.confpassword})
@@ -86,6 +124,12 @@ import { mapActions, mapGetters } from 'vuex'
           password: this.password
         }
         this.signUserInAction(ob);
+      },
+      getUserData() {
+        console.log("getUserData");
+      },
+      onLogout() {
+        console.log("onLogout")
       }
     }
   }

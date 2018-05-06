@@ -2,6 +2,7 @@
 //     commit('increment')
 //   }
 import * as firebase from 'firebase'
+import {router} from "../main.js"
 
 export const createMovieAction = ({commit}, mov) => {
 console.log("Akcja mov: ",mov)
@@ -62,6 +63,48 @@ var movie;
 
 }
 
+export const editMovieAction = ({commit},{ob, id}) => {
+  console.log("Before firebase update: ",ob," id: ",id);
+  const movie = {};
+
+  if(ob.title) {
+    movie.title = ob.title;
+  }
+  console.log("ob description: ",ob.description)
+  if(ob.description) {
+    movie.description = ob.description;
+  }
+  if(ob.imageUrl) {
+    movie.imageUrl = ob.imageUrl;
+  }
+  if(ob.category) {
+    movie.category = ob.category;
+  }
+
+  movie.isRecomended = ob.isRecomended;
+
+  firebase.database().ref('movies').child(id).update(movie)
+    .then(() => {
+      console.log("Before mutation update")
+      commit('updateMovieMutation', {ob, id});
+    })
+}
+
+export const removeMovieAction = ({ commit }, id) => {
+  console.log("Chce usunac movie id:",id);
+  console.log("child element: ",firebase.database().ref('movies').child(id).title)
+  const that = this;
+  firebase.database().ref('movies').child(id).remove()
+    .then((response) => {
+      // this.$router.push('/');
+      // console.log("router: ",that.$router);
+    })
+    .catch((err) => {
+      console.log("Nie udało się usunąc filmu", err);
+    })
+    // this.router.push("/");
+}
+
 export const signUpAction = ({commit},object) => {
   firebase.auth().createUserWithEmailAndPassword(object.email, object.password)
     .then(
@@ -96,29 +139,56 @@ export const signUserInAction = ({commit}, ob) => {
     ).catch( error => console.log("error: ",error));
 }
 
-export const loadMoviesAction = ({ commit }) => {
-  firebase.database().ref('movies').once('value')
-    .then(
-      data => {
-        const movies = {};
-        const ob = data.val();
-        for(let key in ob) {
-          // movies.push({
-          //   ...ob[key],
-          //   id: key
-          // });
-          movies[key] = {
-            ...ob[key],
-            id: key
+export const signUserInFacebookAction = ({ commit }, ob) => {
+  // console.log("metody firebase.auth(): ",firebase.auth().getCurrentUser);
+  firebase.auth().signInWithPopup(new firebase.auth.FacebookAuthProvider())
+        .then(
+          user => {
+            // commit('setLoading', false)
+            const newUser = {
+              id: user.uid,
+              name: user.displayName,
+              email: user.email,
+              photoUrl: user.photoURL
+            }
+            commit('setUserMutation', User);
           }
-        }
+        )
+        .catch(
+          error => {
+            // commit('setLoading', false)
+            // commit('setError', error)
+            console.log(error)
+          }
+        )
+}
 
-        commit('setLoadedMovies', movies);
+export const loadMoviesAction = ({ commit }) => {
+  firebase.database().ref('movies').on('value', (snapshot) => {
+    const movies = {};
+    const ob = snapshot.val();
+    for(let key in ob) {
+      // movies.push({
+      //   ...ob[key],
+      //   id: key
+      // });
+      movies[key] = {
+        ...ob[key],
+        id: key
       }
-    )
-    .catch(error => {
-      console.log("error: ",error);
-    })
+    }
+
+    commit('setLoadedMovies', movies);
+    commit('changeLoading', false);
+  })
+    // .then(
+    //   data => {
+    //
+    //   }
+    // )
+    // .catch(error => {
+    //   console.log("error: ",error);
+    // })
 }
 
 export const loadCategoriesAction = ({ commit }) => {

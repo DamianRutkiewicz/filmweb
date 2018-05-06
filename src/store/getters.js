@@ -7,3 +7,4 @@ export const getCategories = state => state.categories;
 export const isSliderLoading = state => state.isSliderLoading;
 export const isMovieLoading = state => state.isMovieLoading;
 export const isError = state => state.error;
+export const isLoading = state => state.isLoading;

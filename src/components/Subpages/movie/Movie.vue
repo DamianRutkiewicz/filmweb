@@ -22,6 +22,9 @@
               <v-btn flat class="primary" @click="dialog = true">
                 Change
               </v-btn>
+              <v-btn flat @click="removeMovie">
+                Remove
+              </v-btn>
             </v-card-actions>
           </v-card>
         </v-card>
@@ -30,7 +33,7 @@
     <v-layout row>
       <v-flex xs12>
         <v-dialog v-model="dialog" max-width="500px">
-
+          <form @submit.prevent="onEditMovie">
               <v-card>
                 <v-card-title>
                   Edytuj {{ movieTitle }}
@@ -99,8 +102,8 @@
                   <v-flex xs10 offset-xs1>
                     <v-select
                       label="Category"
-                      v-model="category"
-                      :items="getCategories"
+                      v-model="categorySelected"
+                      :items="category"
                       :rules="[v => !!v || 'Item is required']"
                       required
                     ></v-select>
@@ -121,7 +124,7 @@
                     <v-btn
                       class="primary"
                       :disabled="!formIsValid"
-                      type="submit">Create</v-btn>
+                      type="submit">Edit</v-btn>
                   </v-flex>
                 </v-layout>
                 <!-- <v-card-text>
@@ -136,13 +139,14 @@
                   <v-btn color="primary" flat @click.stop="acceptChanges">Close</v-btn>
                 </v-card-actions>
               </v-card>
-            </v-dialog>
+            </form>
+          </v-dialog>
       </v-flex>
     </v-layout>
   </v-container>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
   export default {
     data() {
@@ -173,7 +177,8 @@ import { mapGetters } from 'vuex'
         let movie = null;
 
         for(let key in this.getMovies) {
-          if(this.getId[0].title === this.getMovies[key].id ) {
+          console.log("dostaje z getId: ",this.getId);
+          if(this.getId === this.getMovies[key].id) {
             movie = this.getMovies[key];
             console.log("Movie, zanalazlem ten film: ",movie);
             return movie;
@@ -184,7 +189,8 @@ import { mapGetters } from 'vuex'
       },
       movieTitle: {
         get() {
-          const title =  movie.title || 'title';
+          console.log("get title", this.movie);
+          const title =  this.movie.title || 'title';
           this.title = title;
            return title;
         },
@@ -195,7 +201,7 @@ import { mapGetters } from 'vuex'
       },
       movieImage: {
         get() {
-          const image = movie.imageUrl || 'url';
+          const image = this.movie.imageUrl || 'url';
           this.imageUrl = image;
           return image;
         },
@@ -206,7 +212,7 @@ import { mapGetters } from 'vuex'
       },
       movieDescription: {
         get() {
-          const desc = movie.description || 'description';
+          const desc = this.movie.description || 'description';
           this.description = desc;
           return desc;
         },
@@ -216,7 +222,7 @@ import { mapGetters } from 'vuex'
 
       },
       movieDate() {
-        const date = new Date(movie.date);
+        const date = new Date(this.movie.date);
         const year = date.getFullYear();
         const month = date.getMonth();
         const day = date.getDate();
@@ -224,9 +230,16 @@ import { mapGetters } from 'vuex'
       },
       category: {
         get() {
-          const cat = movie.category || '';
+          const cat = this.movie.category || '';
           this.categorySelected = cat;
-          return cat
+
+          let category = [];
+          const categories = this.getCategories;
+          for(let ob in categories) {
+            category.push(categories[ob])
+          }
+
+          return category;
         },
         set(val) {
           this.categorySelected = val;
@@ -235,8 +248,33 @@ import { mapGetters } from 'vuex'
       }
     },
     methods: {
+      ...mapActions([
+        'editMovieAction',
+        'removeMovieAction'
+      ]),
       acceptChanges() {
         this.dialog = false;
+      },
+      onEditMovie() {
+        const movie = {
+          title: this.title,
+          imageUrl: this.imageUrl,
+          image: this.image,
+          description: this.description,
+          category: this.categorySelected.title,
+          isRecomended: this.isRecomended,
+          date: new Date().toISOString(),
+          image: null
+        }
+        const id = this.getId;
+        this.editMovieAction({ob: movie,id: id });
+        this.clearForm();
+      },
+      removeMovie() {
+        this.removeMovieAction(this.getId)
+          .then(() => {
+            this.$router.push('/');
+          })
       },
       clearForm() {
         this.title = '';

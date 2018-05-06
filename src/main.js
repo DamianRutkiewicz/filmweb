@@ -8,6 +8,9 @@ import 'vuetify/dist/vuetify.min.css'
 import { store } from './store/store'
 import * as firebase from 'firebase'
 import VueLodash from 'vue-lodash'
+import FBSignInButton from 'vue-facebook-signin-button'
+
+Vue.use(FBSignInButton)
 
 Vue.use(VueLodash)
 
@@ -27,10 +30,10 @@ new Vue({
   el: '#app',
   router,
   store,
+  FBSignInButton,
   components: { App },
   template: '<App/>',
   created() {
-    console.log("before firebase initialize: ",firebase)
     firebase.initializeApp({
     apiKey: "AIzaSyCKmD637M9oPpolp0qROLdy2Lhl1DVdKRk",
     authDomain: "filmbase-5f437.firebaseapp.com",
@@ -50,7 +53,6 @@ new Vue({
 
   },
 })
-
 
 // <script>
 //   window.fbAsyncInit = function() {

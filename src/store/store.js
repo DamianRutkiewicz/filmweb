@@ -17,6 +17,7 @@ export const store = new Vuex.Store({
     user: null,
     sliderIsLoading: true,
     movieIsLoading: false,
+    loading: true,
     error: null,
     // error: null
   },

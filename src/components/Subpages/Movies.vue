@@ -4,7 +4,19 @@
     <v-container>
       <v-layout>
         <v-toolbar>
-          <v-btn flat v-for="cat in getCategories" @click="filterMovies(cat.title)" :key="cat.title">{{ cat.text }}</v-btn>
+          <div class="text-xs-center hidden-lg-and-up">
+            <v-menu offset-y>
+              <v-btn dark slot="activator">Category</v-btn>
+              <v-list>
+                <v-list-tile @click="filterMovies('wszystkie')">Wszystkie</v-list-tile>
+                <v-list-tile v-for="item in getCategories" :key="item.title" @click="filterMovies(item.title)">
+                  <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                </v-list-tile>
+              </v-list>
+            </v-menu>
+          </div>
+          <v-btn class="hidden-md-and-down" flat @click="filterMovies('wszystkie')">Wszystkie</v-btn>
+          <v-btn class="hidden-md-and-down" flat v-for="cat in getCategories" @click="filterMovies(cat.title)" :key="cat.title">{{ cat.text }}</v-btn>
         </v-toolbar>
       </v-layout>
       <v-layout row wrap>
@@ -33,6 +45,9 @@ import { mapGetters } from 'vuex'
         'getCategories'
       ]),
       Movies() {
+        if(this.selectedCategory === 'wszystkie') {
+          return this.getMovies;
+        }
         if(this.selectedCategory !== '' && this.selectedCategory !== undefined) {
           // for(let n in this.getMovies) {
           //

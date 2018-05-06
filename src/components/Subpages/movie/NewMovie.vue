@@ -52,12 +52,12 @@
                 @change="onFilePicked"
                 required/>
             </v-flex>
-          </v-layout>
+          </v-layout> -->
           <v-layout row>
             <v-flex xs6 offset-sm3>
               <img :src="imageUrl"/>
             </v-flex>
-          </v-layout> -->
+          </v-layout>
           <v-layout row>
             <v-flex xs12 sm6 offset-sm3>
               <v-text-field

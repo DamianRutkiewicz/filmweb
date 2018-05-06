@@ -1,5 +1,8 @@
 <template>
   <v-container justify-space-around="true">
+    <v-layout row>
+      <h1>Recommended</h1>
+    </v-layout>
     <v-layout row wrap>
       <v-flex xs12 md6 lg4 v-for="movie in Movies" :key="movie.title">
         <movie-element :movie="movie"></movie-element>
